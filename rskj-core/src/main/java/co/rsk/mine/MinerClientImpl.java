@@ -105,7 +105,7 @@ public class MinerClientImpl implements MinerClient {
         try {
             if (mineBlock()) {
                 if (config.getBlockchainConfig() instanceof RegTestConfig) {
-                    Thread.sleep(1000);
+                    Thread.sleep(500);
                 }
                 else if (config.getBlockchainConfig() instanceof DevNetConfig) {
                     Thread.sleep(20000);
