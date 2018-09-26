@@ -384,6 +384,12 @@ public class ContractDetailsImpl implements ContractDetails {
         return (code==null || code.length==0) && keys.isEmpty();
     }
 
+    @Override
+    public void mergeStore(ContractDetails storeContractDetails) {
+        ((ContractDetailsImpl) storeContractDetails).getTrie().copyTo(((TrieImpl)this.trie).getStore());
+        checkExternalStorage();
+    }
+
     public Trie getTrie() {
         return this.trie;
     }
@@ -401,7 +407,7 @@ public class ContractDetailsImpl implements ContractDetails {
     }
 
     private void checkExternalStorage() {
-        this.externalStorage = (keys.size() > memoryStorageLimit) || this.externalStorage;
+        this.externalStorage = true;
     }
 
     private String getDataSourceName() {

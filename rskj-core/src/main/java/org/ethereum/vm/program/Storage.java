@@ -245,7 +245,10 @@ public class Storage implements Repository, ProgramListenerAware {
     }
 
     @Override
-    public void updateContractDetails(RskAddress addr, ContractDetails contractDetails) {
+    public void updateContractDetails(
+            RskAddress addr,
+            ContractDetails contractDetails,
+            ContractDetails storeContractDetails) {
         throw new UnsupportedOperationException();
     }
 
