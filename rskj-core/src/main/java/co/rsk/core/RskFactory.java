@@ -332,14 +332,14 @@ public class RskFactory {
     }
 
     @Bean
-    public EthModuleTransaction getEthModuleTransaction(RskSystemProperties config, Ethereum eth, Wallet wallet, TransactionPool transactionPool) {
+    public EthModuleTransaction getEthModuleTransaction(RskSystemProperties config, Ethereum eth, Wallet wallet, TransactionPool transactionPool, MinerServer minerServer, MinerClient minerClient, Blockchain blockchain) {
 
         if (wallet == null) {
             return new EthModuleTransactionDisabled();
         }
 
-        if(config.autoMine()){
-            return new EthModuleTransactionInstant(config, eth, wallet, transactionPool);
+        if(config.isMinerClientEnabled() &&  config.autoMine()){
+            return new EthModuleTransactionInstant(config, eth, wallet, transactionPool, minerServer, minerClient, blockchain);
         }
 
         return new EthModuleTransactionEnabled(config, eth, wallet, transactionPool);

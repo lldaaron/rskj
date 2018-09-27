@@ -51,6 +51,7 @@ public class MinerClientImpl implements MinerClient {
     private final MinerServer minerServer;
     private final Duration delayBetweenBlocks;
     private final Duration delayBetweenRefreshes;
+    private final Boolean autoMine;
 
     private volatile boolean stop = false;
 
@@ -67,11 +68,16 @@ public class MinerClientImpl implements MinerClient {
         this.minerServer = minerServer;
         this.delayBetweenBlocks = config.minerClientDelayBetweenBlocks();
         this.delayBetweenRefreshes = config.minerClientDelayBetweenRefreshes();
+        this.autoMine = config.minerClientAutoMine();
     }
 
     public void mine() {
         aTimer = new Timer("Refresh work for mining");
         aTimer.schedule(createRefreshWork(), 0, this.delayBetweenRefreshes.toMillis());
+
+        if(this.autoMine){
+            return;
+        }
 
         Thread doWorkThread = this.createDoWorkThread();
         doWorkThread.start();

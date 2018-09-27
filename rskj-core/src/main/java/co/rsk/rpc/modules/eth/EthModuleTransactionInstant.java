@@ -21,10 +21,11 @@ package co.rsk.rpc.modules.eth;
 import co.rsk.config.RskSystemProperties;
 import co.rsk.core.RskAddress;
 import co.rsk.core.Wallet;
+import co.rsk.mine.MinerClient;
+import co.rsk.mine.MinerManager;
+import co.rsk.mine.MinerServer;
 import org.bouncycastle.util.encoders.Hex;
-import org.ethereum.core.Account;
-import org.ethereum.core.Transaction;
-import org.ethereum.core.TransactionPool;
+import org.ethereum.core.*;
 import org.ethereum.facade.Ethereum;
 import org.ethereum.rpc.TypeConverter;
 import org.ethereum.rpc.Web3;
@@ -44,12 +45,18 @@ public class EthModuleTransactionInstant implements EthModuleTransaction {
     private final Ethereum eth;
     private final Wallet wallet;
     private final TransactionPool transactionPool;
+    private final MinerServer minerServer;
+    private final MinerClient minerClient;
+    private final Blockchain blockchain;
 
-    public EthModuleTransactionInstant(RskSystemProperties config, Ethereum eth, Wallet wallet, TransactionPool transactionPool) {
+    public EthModuleTransactionInstant(RskSystemProperties config, Ethereum eth, Wallet wallet, TransactionPool transactionPool, MinerServer minerServer, MinerClient minerClient, Blockchain blockchain) {
         this.config = config;
         this.eth = eth;
         this.wallet = wallet;
         this.transactionPool = transactionPool;
+        this.minerServer = minerServer;
+        this.minerClient = minerClient;
+        this.blockchain = blockchain;
     }
 
     @Override
@@ -74,6 +81,9 @@ public class EthModuleTransactionInstant implements EthModuleTransaction {
                 eth.submitTransaction(tx.toImmutableTransaction());
                 s = tx.getHash().toJsonString();
             }
+
+            minerServer.buildBlockToMine(blockchain.getBestBlock(), false);
+            minerClient.mineBlock();
 
             //TODO:We must immediately mine this transaction in a new block
 

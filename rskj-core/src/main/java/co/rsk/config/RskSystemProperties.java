@@ -125,12 +125,7 @@ public class RskSystemProperties extends SystemProperties {
     }
 
     public Duration minerClientDelayBetweenBlocks() {
-        if(!configFromFiles.getBoolean("miner.client.autoMine")){
-            return configFromFiles.getDuration("miner.client.delayBetweenBlocks");
-        }else{
-            //TODO: We need to disccuse which is the minimum value for delayBetweenBlocks
-            return Duration.ofSeconds(0);
-        }
+        return configFromFiles.getDuration("miner.client.delayBetweenBlocks");
     }
 
     public boolean autoMine() {
@@ -139,6 +134,10 @@ public class RskSystemProperties extends SystemProperties {
 
     public Duration minerClientDelayBetweenRefreshes() {
         return configFromFiles.getDuration("miner.client.delayBetweenRefreshes");
+    }
+
+    public Boolean minerClientAutoMine() {
+        return configFromFiles.getBoolean("miner.client.autoMine");
     }
 
     public boolean isMinerServerEnabled() {
